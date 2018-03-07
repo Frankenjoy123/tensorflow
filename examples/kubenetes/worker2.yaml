@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tf-worker-2
+spec:
+  clusterIP: None
+  ports:
+    - port: 2222
+      targetPort: 2222
+  selector:
+    app: tf-worker-2
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tf-worker-2
+  labels:
+     app: tf-worker-2
+spec:
+      containers:
+        - name: worker
+          image: gcr.io/tensorflow/tensorflow
+          ports:
+           - containerPort: 2222
+          volumeMounts:
+           - mountPath: /tensorflow
+             name: tf-volume
+      volumes:
+         - name: tf-volume
+           hostPath:
+              path: /root/tensorflow
